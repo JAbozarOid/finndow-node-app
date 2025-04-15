@@ -11,6 +11,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 const upload = multer({ dest: "uploads/" });
 
 // Configure middleware
@@ -43,7 +44,7 @@ app.post("/api/generate-exercise", async (req, res) => {
                    Format the response as JSON with fields: finnishText, pronunciationGuide, englishTranslation`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
@@ -139,7 +140,16 @@ function convertAudio(inputPath, outputPath) {
   });
 }
 
+const models = await openai.models.list();
+console.log(models);
+console.log(
+  "Available models:",
+  models.data.map((model) => model.id)
+);
+console.log("OpenAI API Key:", process.env.OPENAI_API_KEY);
+
 // Start server
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
+  console.log(`Base URL: ${BASE_URL}`);
 });
