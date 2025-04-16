@@ -15,7 +15,7 @@ const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
 const upload = multer({ dest: "uploads/" });
 
 // Configure middleware
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Initialize OpenAI client
@@ -44,13 +44,14 @@ app.post("/api/generate-exercise", async (req, res) => {
                    Format the response as JSON with fields: finnishText, pronunciationGuide, englishTranslation`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
 
     const exercise = JSON.parse(completion.choices[0].message.content);
-    res.json(exercise);
+    res.json({ data: exercise });
+    console.log("Sending response:", JSON.stringify({ data: exercise }));
   } catch (error) {
     console.error("Error generating exercise:", error);
     res.status(500).json({ error: "Failed to generate exercise" });
@@ -91,7 +92,7 @@ app.post(
     `;
 
       const evaluation = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [{ role: "user", content: evaluationPrompt }],
         response_format: { type: "json_object" },
       });
