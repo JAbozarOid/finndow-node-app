@@ -87,8 +87,14 @@ app.post("/api/generate-exercise", async (req, res) => {
     });
 
     const exercise = JSON.parse(completion.choices[0].message.content);
-    res.json({ data: exercise });
-    console.log("Success generate-exercise :", JSON.stringify(exercise));
+    res.json({ 
+      data: {
+        ...exercise,
+        level,
+        type
+      } 
+    });
+    console.log("Success generate-exercise:", JSON.stringify({ ...exercise, level, type }));
   } catch (error) {
     console.error("Error generating-exercise :", error);
     res.status(500).json({ error: "Failed to generate exercise" });
