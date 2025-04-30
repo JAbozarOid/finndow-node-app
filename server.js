@@ -94,6 +94,7 @@ app.post("/api/generate-exercise", async (req, res) => {
         type
       } 
     });
+    // ✅ Log the generated exercise
     console.log("Success generate-exercise:", JSON.stringify({ ...exercise, level, type }));
   } catch (error) {
     console.error("Error generating-exercise :", error);
