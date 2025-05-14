@@ -1,0 +1,129 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Finnish Speaking Practice API",
+      "version": "1.0.0",
+      "description": "API for generating speaking practices and evaluating user speech for Finnish learners"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:4000"
+      }
+    ],
+    "paths": {
+      "/generate-practice": {
+        "post": {
+          "summary": "Generate practice content",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "level": {
+                      "type": "string",
+                      "enum": ["beginner", "intermediate", "advanced"]
+                    },
+                    "topic": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["level"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Practice generated successfully"
+            }
+          }
+        }
+      },
+      "/text-to-speech": {
+        "post": {
+          "summary": "Convert practice text to speech",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["text"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Audio file returned"
+            }
+          }
+        }
+      },
+      "/evaluate": {
+        "post": {
+          "summary": "Evaluate user's recorded speech",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "audio": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "referenceText": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["audio", "referenceText"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Evaluation result"
+            }
+          }
+        }
+      },
+      "/transcribe": {
+        "post": {
+          "summary": "Transcribe user voice to text",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "audio": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "required": ["audio"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Transcription result"
+            }
+          }
+        }
+      }
+    }
+  }
+  
